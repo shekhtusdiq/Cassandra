@@ -1,1 +1,1 @@
-This module install cassandra, it's not bounded for specific version, by default it will install 2.0.9 if you need to install different version edit params.pp with the download url and base home dir variable.
+This module install cassandra, it's not bounded for specific version, by default it will install 2.0.9 if you need to install different version edit params.pp with the $get_url and $cassandra_home dir variable.

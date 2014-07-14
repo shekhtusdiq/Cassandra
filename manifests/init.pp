@@ -91,8 +91,8 @@ require cassandra::params
     		content => template("cassandra/setenv.sh.erb"),
 	}
 
-	#exec { "Set Env Path":
-    	#command => "bash -c 'source /etc/profile'",
-	#}
+	exec { "Set Env Path":
+    		command => "bash -c 'source /etc/profile'",
+	}
  		
 }

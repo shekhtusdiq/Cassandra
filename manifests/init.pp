@@ -89,10 +89,12 @@ require cassandra::params
 	file { "/etc/profile.d/setenv.sh":
     		ensure => 'file',
     		content => template("cassandra/setenv.sh.erb"),
+		alias => 'Copy_ENV'
 	}
 
 	exec { "Set Env Path":
     		command => "bash -c 'source /etc/profile'",
+		require => File['Copy_ENV'],
 	}
  		
 }

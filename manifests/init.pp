@@ -1,4 +1,4 @@
-#/etc/puppet/modules/sudo/manifests/init.pp
+#/etc/puppet/modules/cassandra/manifests/init.pp
 class cassandra {
 	
 require cassandra::params	

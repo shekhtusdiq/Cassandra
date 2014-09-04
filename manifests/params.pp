@@ -1,12 +1,12 @@
 class cassandra::params {
 #Install Dir
   $install_dir = $::hostname ? {
-  	default => "/opt/cassandra"
+  	default => "/home/cassandra"
   }
 
 #Cassandra Home
   $cassandra_home = $::hostname ? {
-	default => "/opt/cassandra/apache-cassandra-2.0.9"
+	default => "/home/cassandra/apache-cassandra-2.0.9"
   }
 
 #Cassandra bin

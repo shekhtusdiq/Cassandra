@@ -26,7 +26,7 @@ commitlog_segment_size_in_mb: 32
 seed_provider:
     - class_name: org.apache.cassandra.locator.SimpleSeedProvider
       parameters:
-          - seeds: "<%= scope.lookupvar('::ipaddress') %>"
+          - seeds: "<%= scope.lookupvar('cassandra::params::seeds') %>"
 concurrent_reads: 32
 concurrent_writes: 32
 memtable_flush_queue_size: 4
@@ -38,7 +38,7 @@ listen_address: <%= scope.lookupvar('::ipaddress') %>
 start_native_transport: true
 native_transport_port: 9042
 start_rpc: true
-rpc_address: <%= scope.lookupvar('::ipaddress') %>
+rpc_address: 0.0.0.0
 rpc_port: 9160
 rpc_keepalive: true
 rpc_server_type: sync

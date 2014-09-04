@@ -31,6 +31,6 @@ class cassandra::params {
 
 #Cassandra nodes        
   $seeds = $::hostname ? {
-    	default => "slaveA, slaveB",
+    	default => "192.168.56.103, 192.168.56.104",
   }
 }

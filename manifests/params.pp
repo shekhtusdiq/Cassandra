@@ -6,7 +6,7 @@ class cassandra::params {
 
 #Cassandra Home
   $cassandra_home = $::hostname ? {
-	default => "/home/cassandra/apache-cassandra-2.0.9"
+	default => "/home/cassandra/apache-cassandra-2.0.10"
   }
 
 #Cassandra bin

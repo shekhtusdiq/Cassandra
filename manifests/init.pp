@@ -48,7 +48,7 @@ require cassandra::params
 		command => "wget ${cassandra::params::get_url}",
 		timeout => 1800,
 		tries   => 2,
-		creates => "/home/cassandra/apache-cassandra-2.0.9-bin.tar.gz",
+		creates => "/home/cassandra/apache-cassandra-2.0.10-bin.tar.gz",
 		alias => 'Download_tar',
 		require => User["cassandra"],
 	}

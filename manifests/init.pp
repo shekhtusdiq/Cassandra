@@ -19,82 +19,88 @@ require cassandra::params
 		before => File['Test'],
 	}
 
-	# Create Installation directory
-	file { "${cassandra::params::install_dir}":
-    		ensure => "directory",
-        	alias => "Base_dir",
-		before => Exec["Download_tar"],
-	}
-
-	# Donwload tar file
-	exec { "wget $get_url}":
-		cwd => "/opt/cassandra/",
-		command => "wget ${cassandra::params::get_url}",
-		creates => "/opt/cassandra/apache-cassandra-2.0.9-bin.tar.gz",
-		alias => "Download_tar",
+       # Add Group cassandra
+	group { "cassandra":
+    		ensure => "present",
+    		gid => '1001',
+		#before => 'Download_tar',
 	}
 	
-	# Extract Cassandra
-	exec { "tar zxvf apache-cassandra-2.0.9-bin.tar.gz -C /opt/cassandra":
-    		cwd => "/opt/cassandra/",
-        	creates => "/opt/cassandra/apache-cassandra-2.0.9",
+	# Add User cassandra
+	user { 'cassandra':
+  		ensure           => 'present',
+  		gid              => '1001',
+  		groups           => 'cassandra',
+  		home             => "${cassandra::params::install_dir}",
+  		password         => '$6$5qu6iW.hdIp$N4TF2DYDkVd0S72OBNeUbEMuv8OOxBuUvsOtfDpc3Pe2/0fqdv.7R5lss7anNoNHYXwd49lK.Y3X5iUUEIN57/',
+  		password_max_age => '99999',
+  		password_min_age => '0',
+  		shell            => '/bin/bash',
+  		uid              => '1001',
+  		managehome       => true,
+  		require          => Group["cassandra"],
+	}		
+	
+	# Download Package
+	exec { "wget $get_url}":
+		user => 'cassandra',
+		cwd => "${cassandra::params::install_dir}",
+		command => "wget ${cassandra::params::get_url}",
+		timeout => 1800,
+		tries   => 2,
+		creates => "/home/cassandra/apache-cassandra-2.0.9-bin.tar.gz",
+		alias => 'Download_tar',
+		require => User["cassandra"],
+	}
+	# Extract cassandra
+	exec { "tar zxvf apache-cassandra-2.0.9-bin.tar.gz -C /home/cassandra":
+    		user => 'cassandra',
+		cwd => "${cassandra::params::install_dir}",
+        	creates => "${cassandra::params::cassandra_home}",
 		alias => "extract",
 		require => Exec['Download_tar']
 	}
-	
-	# Startup script
-	file { "/etc/init.d/cassandra":
-		mode => 755,
-		alias => "Init Script",
-		content => template("cassandra/cassandra.erb"),
-	}	
-
+	# Copy JRE
+        file { "${cassandra::params::cassandra_home}/jre-7u55-linux-x64.gz":
+                owner => 'cassandra',
+		group => 'cassandra',
+		ensure => 'file',
+                source => 'puppet:///modules/cassandra/jre-7u55-linux-x64.gz',
+                alias => 'Copy_JRE',
+                require => Exec["extract"],
+        }
+	# Extract JRE
+	exec { "tar zxvf jre-7u55-linux-x64.gz":
+		user => 'cassandra',
+		cwd => "${cassandra::params::cassandra_home}",
+                creates => "${cassandra::params::jre_home}",
+                alias => "Extract_JRE",
+                require => File['Copy_JRE']
+        }
 	# Copy cassandra.yaml
-	file { "${cassandra::params::cassandra_home}/conf/cassandra.yaml":
-             	ensure => 'file',
-             	content => template("cassandra/cassandra.yaml.erb"),
-	   	require => Exec['extract']
-	}
+        file { "${cassandra::params::cassandra_home}/conf/cassandra.yaml":
+                ensure => 'file',
+                content => template("cassandra/cassandra.yaml.erb"),
+                require => Exec['extract']
+        }
 
 	# Copy cassandraenv.sh
-	file { "${cassandra::params::cassandra_home}/conf/cassandra-env.sh":
+        file { "${cassandra::params::cassandra_home}/conf/cassandra-env.sh":
                 ensure => 'file',
                 content => template("cassandra/cassandra-env.sh.erb"),
                 require => Exec['extract']
- 	}
-############################ Java Installation ###################################################
-
-	# Copy JRE
-	file { "${cassandra::params::cassandra_home}/jre-7u55-linux-x64.rpm":
-    		ensure => 'file',
-    		source => 'puppet:///modules/cassandra/jre-7u55-linux-x64.rpm', 
-    	#	creates => '/opt/cassandra/apache-cassandra-2.0.9/jre-7u55-linux-x64.rpm',
-    		alias => 'Copy_JRE',
-		require => Exec['extract'],
-	}	
-
-	# rpm should be installed	
-	package { 'rpm':
-    		ensure => installed,
-	}
-
-	# Install JRE
-	exec { "rpm -ivh jre-7u55-linux-x64.rpm":
-     		cwd => "${cassandra::params::cassandra_home}",
-		creates => '/usr/java/jre1.7.0_55/',
-		require => File['Copy_JRE']
-	}
-
+        }
 	# Set Java Env
-	file { "/etc/profile.d/setenv.sh":
-    		ensure => 'file',
-    		content => template("cassandra/setenv.sh.erb"),
-		alias => 'Copy_ENV'
-	}
+        file { "/etc/profile.d/setenv.sh":
+                ensure => 'file',
+                content => template("cassandra/setenv.sh.erb"),
+                alias => 'Copy_ENV'
+        }
+	# Startup script
+        file { "/etc/init.d/cassandra":
+                mode => 755,
+                alias => "Init Script",
+                content => template("cassandra/cassandra.erb"),
+        }
 
-	exec { "Set Env Path":
-    		command => "bash -c 'source /etc/profile'",
-		require => File['Copy_ENV'],
-	}
- 		
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
-export JAVA_HOME=/usr/java/jre1.7.0_55/
-export PATH=$PATH:/usr/java/jre1.7.0_55/bin
+export JAVA_HOME=<%= scope.lookupvar('cassandra::params::jre_home') %>
+export PATH=$PATH:<%= scope.lookupvar('cassandra::params::jre_home') %>/bin
 export PATH=$PATH:<%= scope.lookupvar('cassandra::params::cassandra_bin') %>
 

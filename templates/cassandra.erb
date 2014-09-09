@@ -7,9 +7,9 @@
 CASSANDRA_HOME='<%= scope.lookupvar('cassandra::params::cassandra_home') %>'
 CASSANDRA_BIN=$CASSANDRA_HOME/bin/cassandra
 CASSANDRA_NODETOOL=$CASSANDRA_HOME/bin/nodetool
-CASSANDRA_LOG=/var/log/cassandra/cassandra.log
-CASSANDRA_PID=/var/run/cassandra.pid
-CASSANDRA_LOCK=/var/lock/subsys/cassandra
+CASSANDRA_LOG=$CASSANDRA_HOME/logs/cassandra.log
+CASSANDRA_PID=$CASSANDRA_HOME/cassandra.pid
+CASSANDRA_LOCK=$CASSANDRA_HOME/cassandra
 PROGRAM="cassandra"
 
 if [ ! -f $CASSANDRA_BIN ]; then
@@ -24,7 +24,6 @@ start() {
     echo "Cassandra is already running."
     exit 0
   fi
-  mkdir -p /var/log/cassandra/
   echo -n $"Starting $PROGRAM: "
   daemon $CASSANDRA_BIN -p $CASSANDRA_PID >> $CASSANDRA_LOG 2>&1
   usleep 500000

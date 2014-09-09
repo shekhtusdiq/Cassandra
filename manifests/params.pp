@@ -21,7 +21,7 @@ class cassandra::params {
 
 #Download Url
   $get_url = $::hostname ? {
-	default => "https://archive.apache.org/dist/cassandra/2.0.9/apache-cassandra-2.0.9-bin.tar.gz"	
+	default => "http://apache.mirrors.tds.net/cassandra/2.0.10/apache-cassandra-2.0.10-bin.tar.gz"	
   }
 
 #Cluster name

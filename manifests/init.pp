@@ -84,18 +84,7 @@ require cassandra::params
                 require => Exec['extract']
         }
 
-	# Copy cassandraenv.sh
-        file { "${cassandra::params::cassandra_home}/conf/cassandra-env.sh":
-                ensure => 'file',
-                content => template("cassandra/cassandra-env.sh.erb"),
-                require => Exec['extract']
-        }
-	# Set Java Env
-        file { "/etc/profile.d/setenv.sh":
-                ensure => 'file',
-                content => template("cassandra/setenv.sh.erb"),
-                alias => 'Copy_ENV'
-        }
+	
 	# Startup script
         file { "/etc/init.d/cassandra":
                 mode => 755,

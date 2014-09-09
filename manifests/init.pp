@@ -53,7 +53,7 @@ require cassandra::params
 		require => User["cassandra"],
 	}
 	# Extract cassandra
-	exec { "tar zxvf apache-cassandra-2.0.9-bin.tar.gz -C /home/cassandra":
+	exec { "tar zxvf apache-cassandra-2.0.10-bin.tar.gz -C /home/cassandra":
     		user => 'cassandra',
 		cwd => "${cassandra::params::install_dir}",
         	creates => "${cassandra::params::cassandra_home}",

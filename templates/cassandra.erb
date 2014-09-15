@@ -9,7 +9,7 @@ export JAVA_HOME=<%= scope.lookupvar('cassandra::params::jre_home') %>
 CASSANDRA_HOME='<%= scope.lookupvar('cassandra::params::cassandra_home') %>'
 CASSANDRA_BIN=$CASSANDRA_HOME/bin/cassandra
 CASSANDRA_NODETOOL=$CASSANDRA_HOME/bin/nodetool
-CASSANDRA_LOG=$CASSANDRA_HOME/logs/cassandra.log
+CASSANDRA_LOG=$CASSANDRA_HOME/cassandra.log
 CASSANDRA_PID=$CASSANDRA_HOME/cassandra.pid
 CASSANDRA_LOCK=$CASSANDRA_HOME/cassandra
 PROGRAM="cassandra"

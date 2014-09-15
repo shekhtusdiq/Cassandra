@@ -91,5 +91,14 @@ require cassandra::params
                 alias => "Init Script",
                 content => template("cassandra/cassandra.erb"),
         }
+        
+	# Copy bash_profile
+	file { "/home/cassandra/.bash_profile":
+   	 	ensure => present,
+	 	owner => "cassandra",
+	 	group => "cassandra",
+	 	content => template("cassandra/bash_profile.erb"),
+	 	require => User["cassandra"]
+       }
 
 }

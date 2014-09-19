@@ -1,0 +1,14 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+export PATH=$PATH:<%= scope.lookupvar('cassandra::params::jre_home') %>/bin:<%= scope.lookupvar('cassandra::params::cassandra_home') %>/bin
+
+
+PATH=$PATH:$HOME/bin
+
+export PATH

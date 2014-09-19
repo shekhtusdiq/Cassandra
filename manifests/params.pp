@@ -41,10 +41,10 @@ class cassandra::params {
   }
 
 # Token assign
-#  $initial_token = $::hostname ? {
-#    cassandraA => "-9223372036854775808",
-#    cassandraB => "-3074457345618258603",
-#    cassandraC => "3074457345618258602",
-#  }
+  $initial_token = $::hostname ? {
+    cassandraA => "-9223372036854775808",
+    cassandraB => "-3074457345618258603",
+    cassandraC => "3074457345618258602",
+  }
 
 }

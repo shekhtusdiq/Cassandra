@@ -39,4 +39,12 @@ class cassandra::params {
   $seeds = $::hostname ? {
     	default => "192.168.56.103, 192.168.56.104",
   }
+
+# Token assign
+#  $initial_token = $::hostname ? {
+#    cassandraA => "-9223372036854775808",
+#    cassandraB => "-3074457345618258603",
+#    cassandraC => "3074457345618258602",
+#  }
+
 }

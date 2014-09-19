@@ -100,5 +100,12 @@ require cassandra::params
 	 	content => template("cassandra/bash_profile.erb"),
 	 	require => User["cassandra"]
        }
+       # Copy log4j-server.properites
+       file { "${cassandra::params::cassandra_home}/conf/log4j-server.properties":
+                ensure => 'file',
+                content => template("cassandra/log4j-server.properties.erb"),
+                require => Exec['extract']
+        }
+
 
 }
